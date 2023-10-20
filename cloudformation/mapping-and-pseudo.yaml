@@ -1,11 +1,23 @@
 AWSTemplateFormatVersion: "2010-09-09"
 
+Mappings:
+  AmiRegionMap:
+    us-east-1:
+      AMI: ami-0df435f331839b2d6
+    us-east-2:
+      AMI: ami-09d9029d9fc5e5238
+    us-west-1:
+      AMI: ami-0c87a756f3fd22df2
+
 Resources:
   MyInstance:
     Type: AWS::EC2::Instance
     Properties:
       InstanceType: t2.micro
-      ImageId: ami-0fb820135757d28fd
+      ImageId: !FindInMap
+        - AmiRegionMap
+        - !Ref AWS::Region
+        - AMI
       Tags:
         - Key: Name
           Value: !Join
