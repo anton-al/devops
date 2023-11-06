@@ -2,10 +2,10 @@
 - name: DBserver setup
   hosts: dbservers
   become: yes
-  vars:
-    dbname: electric
-    dbuser: admin
-    dbpass: tesla
+#  vars:
+#    dbname: electric
+#    dbuser: admin
+#    dbpass: tesla
   tasks:
     - name: Install mariadb-server
       ansible.builtin.dnf:
