@@ -1,0 +1,31 @@
+---
+- name: Provisioning servers
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install ntp agent on Amazon 2023
+      yum:
+        name: chrony
+        state: present
+      when: ansible_distribution == 'Amazon'
+
+    - name: Install ntp agent on Ubuntu
+      apt:
+        name: ntp
+        state: present
+        update_cache: yes
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Start service ntp agent on Amazon 2023
+      service:
+        name: chronyd
+        state: started
+        enabled: yes
+      when: ansible_distribution == 'Amazon'
+
+    - name: Start service ntp agent on Ubuntu
+      service:
+        name: ntp
+        state: started
+        enabled: yes
+      when: ansible_distribution == 'Ubuntu'
