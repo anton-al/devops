@@ -1,0 +1,82 @@
+---
+- name: Provisioning servers
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install ntp agent on Amazon 2023
+      yum:
+        name: "{{item}}"
+        state: present
+      when: ansible_distribution == 'Amazon'
+      loop:
+        - chrony
+        - wget
+        - git
+        - zip
+        - unzip
+
+    - name: Install ntp agent on Ubuntu
+      apt:
+        name: "{{item}}"
+        state: present
+        update_cache: yes
+      when: ansible_distribution == 'Ubuntu'
+      loop:
+        - ntp
+        - wget
+        - git
+        - zip
+        - unzip
+
+    - name: Start service ntp agent on Amazon 2023
+      service:
+        name: chronyd
+        state: started
+        enabled: yes
+      when: ansible_distribution == 'Amazon'
+
+    - name: Start service ntp agent on Ubuntu
+      service:
+        name: ntp
+        state: started
+        enabled: yes
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Banner file
+      copy:
+        content: "# This server is managed by ansible. No manual changes maza faka!"
+        dest: /etc/motd
+
+    - name: Deploy ntp agent conf on Amazon2023
+      template:
+        src: templates/ntpconf_centos
+        dest: /etc/chrony.conf
+        backup: yes
+      when: ansible_distribution == "Amazon"
+    
+    - name: Deploy ntp agent conf on Ubuntu
+      template:
+        src: templates/ntpconf_ubuntu
+        dest: /etc/ntp.conf
+        backup: yes
+      when: ansible_distribution == "Ubuntu"
+
+    - name: reStart service ntp agent on Amazon 2023
+      service:
+        name: chronyd
+        state: restarted
+        enabled: yes
+      when: ansible_distribution == 'Amazon'
+
+    - name: reStart service ntp agent on Ubuntu
+      service:
+        name: ntp
+        state: restarted
+        enabled: yes
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Create a folder
+      file:
+        path: /opt/test21
+        state: directory
+
