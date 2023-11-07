@@ -1,0 +1,15 @@
+---
+# handlers file for post-install
+- name: reStart service ntp agent on Amazon2023
+  service:
+    name: chronyd
+    state: restarted
+    enabled: yes
+  when: ansible_distribution == 'Amazon'
+
+- name: reStart service ntp agent on Ubuntu
+  service:
+    name: ntp
+    state: restarted
+    enabled: yes
+  when: ansible_distribution == 'Ubuntu'
