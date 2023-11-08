@@ -1,0 +1,20 @@
+- hosts: localhost
+  gather_facts: False
+  tasks:
+    - name: Create ec2 key pair
+      ec2_key:
+        name: sample
+        region: us-east-1
+    - name: start an instance with a public IP address
+      amazon.aws.ec2_instance:
+        name: "public-compute-instance"
+        key_name: "sample"
+        #vpc_subnet_id: subnet-5ca1ab1e
+        instance_type: t2.micro
+        security_group: default
+        region: us-east-1
+        #network:
+        #  assign_public_ip: true
+        image_id: ami-123456
+        tags:
+          Environment: Testing
