@@ -5,8 +5,7 @@
       <paths name="ansible">
         <serverdata>
           <mappings>
-            <mapping deploy="exercises" local="$PROJECT_DIR$/exercises" web="/" />
-            <mapping local="" />
+            <mapping deploy="aws" local="$PROJECT_DIR$/exercises/aws" web="/" />
           </mappings>
         </serverdata>
       </paths>
